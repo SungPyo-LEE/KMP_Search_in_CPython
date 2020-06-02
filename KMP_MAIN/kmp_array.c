@@ -60,7 +60,7 @@ static PyObject* kmp_search(PyObject *self, PyObject *args)
     double Position = KMP(text, strlen(text), 0, pattern, P_size);
     int i = 0;
     int cnt = 0;
-    double *vector={NULL,};
+    double *vector;
     npy_intp dims[1] = {20};
     npy_intp k;
 
