@@ -1,9 +1,10 @@
+#include <Python.h>
+#include <numpy/arrayobject.h>
+#include <math.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-#include <C:\Users\sunng\OneDrive\바탕 화면\My_Spring\Python_Array\KMP_MAINkmp_header.h>
-
-
-#define MAX_BUFFER 512
-int Border[MAX_BUFFER];
 
 void Preprocess(char* Pattern, int PatternSize)
 {
@@ -17,18 +18,15 @@ void Preprocess(char* Pattern, int PatternSize)
             j = Border[j];
         i++;
         j++;
-
         Border[i] = j;
     }
 }
-
 double KMP(char* Text, int TextSize, int Start, char* Pattern, int PatternSize)
 {
     int i = Start;
     int j = 0;
     double Position = -1;
     Preprocess(Pattern, PatternSize);
-
     while(i < TextSize)
     {
         while(j>=0 && Text[i] != Pattern[j])
@@ -43,10 +41,10 @@ double KMP(char* Text, int TextSize, int Start, char* Pattern, int PatternSize)
     }
     return Position;
 }
-
-
+double *pyvector_to_Carrayptrs(PyArrayObject *arrayin);
 static PyObject* kmp_search(PyObject *self, PyObject *args) 
 {
+	double *vector;
     const char* text;
     const char* pattern;
     if (!PyArg_ParseTuple(args, "ss", &text, &pattern)) {
@@ -57,7 +55,7 @@ static PyObject* kmp_search(PyObject *self, PyObject *args)
     double Position = KMP(text, strlen(text), 0, pattern, P_size);
     int i = 0;
     int cnt = 0;
-    double *vector={NULL,};
+    vector=(double*)malloc(sizeof(double)*n);
     npy_intp dims[1] = {20};
     npy_intp k;
 
@@ -83,21 +81,21 @@ static PyObject* kmp_search(PyObject *self, PyObject *args)
     }
     return ret;
 }
-
-
-
-static struct PyModuleDef kmp_search_mods = {
-
-		PyModuleDef_HEAD_INIT,
-
-		"kmp_search",					// 모듈의 이름
-
-		"It is test module.",			// 모듈의 설명을 적는 부분, 모듈의 __doc__에 저장됨
-
-		-1, kmp_array_methods
-
+double *pyvector_to_Carrayptrs(PyArrayObject *arrayin)
+{
+  int n=arrayin->dimensions[0];
+  return (double *) arrayin->data;  /* pointer to arrayin data as double */
+}
+static PyMethodDef kmp_array_methods[] = { 
+	{"kmp_search", kmp_search, METH_VARARGS},
+		{NULL, NULL, 0}
 };
-
+static struct PyModuleDef kmp_search_mods = {
+		PyModuleDef_HEAD_INIT,
+		"kmp_search",					// 모듈의 이름
+		"It is test module.",			// 모듈의 설명을 적는 부분, 모듈의 __doc__에 저장됨
+		-1, kmp_array_methods
+};
 PyMODINIT_FUNC PyInit_kmp_search(void)
 {
     PyObject *module;
