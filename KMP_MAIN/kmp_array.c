@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MAX_BUFFER 512
+int Border[MAX_BUFFER];
 
 void Preprocess(char* Pattern, int PatternSize)
 {
@@ -45,6 +47,7 @@ double *pyvector_to_Carrayptrs(PyArrayObject *arrayin);
 static PyObject* kmp_search(PyObject *self, PyObject *args) 
 {
 	double *vector;
+	double *new_vector;
     const char* text;
     const char* pattern;
     if (!PyArg_ParseTuple(args, "ss", &text, &pattern)) {
@@ -55,12 +58,20 @@ static PyObject* kmp_search(PyObject *self, PyObject *args)
     double Position = KMP(text, strlen(text), 0, pattern, P_size);
     int i = 0;
     int cnt = 0;
+	int flag = 0;
     vector=(double*)malloc(sizeof(double)*n);
-    npy_intp dims[1] = {20};
-    npy_intp k;
-
+    while (i < n)
+    {
+        double Position = KMP(text, strlen(text), i, pattern, P_size);
+        i = Position + P_size;
+		flag += 1;
+    }
+	free(vector);
+	int cnt = 0;
+    npy_intp dims[1] = {flag};
+    //npy_intp k;
     PyObject *ret = PyArray_SimpleNew(1, dims, NPY_DOUBLE);
-    vector = (double *) PyArray_DATA(ret);
+    new_vector = (double *) PyArray_DATA(ret);
     /*
      *  NOTE: Treating PyArray_DATA(ret) as if it were a contiguous one-dimensional C
      *  array is safe, because we just created it with PyArray_SimpleNew, so we know
@@ -69,16 +80,22 @@ static PyObject* kmp_search(PyObject *self, PyObject *args)
     while (i < n)
     {
         double Position = KMP(text, strlen(text), i, pattern, P_size);
-        printf("%lf, %s \n", Position +1, text);
+        //printf("%lf, %s \n", Position +1, text);
         i = Position + P_size;
-		if (vector[cnt-1]>=Position + 1) break;
+		if (new_vector[cnt-1]>=Position + 1) break;
 		else
 		{
-			vector[cnt] = Position + 1;
+			new_vector[cnt] = Position + 1;
 		}
         cnt += 1;
-        
     }
+	//npy_intp dims[1] = {flag};
+    //npy_intp k;
+
+    //PyObject *ret = PyArray_SimpleNew(1, dims, NPY_DOUBLE);
+    //vector = (double *) PyArray_DATA(ret);
+	
+	free(new_vector);
     return ret;
 }
 double *pyvector_to_Carrayptrs(PyArrayObject *arrayin)
@@ -98,6 +115,7 @@ static struct PyModuleDef kmp_search_mods = {
 };
 PyMODINIT_FUNC PyInit_kmp_search(void)
 {
+
     PyObject *module;
     module = PyModule_Create(&kmp_search_mods);
     if(module==NULL) return NULL;
