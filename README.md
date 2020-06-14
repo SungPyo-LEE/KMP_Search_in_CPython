@@ -4,6 +4,10 @@
 자연어 처리 된 문자를 문서에서 빠르게 찾기 위해 KMP 알고리즘을 적용. Python에서 탐색은 느려서 C로 임베딩 된 함수를 이용 해보자
 
 
+## Build
+* NUMPY가 설치된 파이썬 가상환경에서 python array_build.py build
+
+
 ## 참고 사이트
 * 참고: https://github.com/abonaca/streakline/blob/master/streak_wrap.c
 * 참고2: https://scipy-cookbook.readthedocs.io/_downloads/C_arraytest.c
