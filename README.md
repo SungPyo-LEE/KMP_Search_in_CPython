@@ -5,7 +5,15 @@
 
 
 ## Build
-* NUMPY가 설치된 파이썬 가상환경에서 python array_build.py build
+* NUMPY installed Python Envs
+```sh
+$ python array_build.py build
+and
+$ python
+and
+>> import kmp_search
+>> print(kmp_search.kmp_search("abcabadbadcdbabdbacbadbbacbacababadbbadda", "ab"))
+```
 
 
 ## 참고 사이트
