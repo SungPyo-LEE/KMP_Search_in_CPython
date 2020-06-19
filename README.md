@@ -15,6 +15,11 @@ and
 >> print(kmp_search.kmp_search("abcabadbadcdbabdbacbadbbacbacababadbbadda", "ab"))
 ```
 
+## 인코딩
+따로 인코딩 처리를 하지 않았다...! 영어는 잘 읽는데 한글 처리고 민
+
+## 추가 예정
+정규식을 이용하여 문서를 전처리 하는 방법을 생각 해보자
 
 ## 참고 사이트
 * 참고: https://github.com/abonaca/streakline/blob/master/streak_wrap.c
