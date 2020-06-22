@@ -11,8 +11,8 @@ $ python array_build.py build
 and
 $ python
 and
->> import kmp_search
->> print(kmp_search.kmp_search("abcabadbadcdbabdbacbadbbacbacababadbbadda", "ab"))
+>> import nlp_c
+>> print(nlp_c.kmp_search("abcabadbadcdbabdbacbadbbacbacababadbbadda", "ab"))
 ```
 
 ## 인코딩
